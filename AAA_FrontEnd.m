@@ -1,3 +1,5 @@
+% Implement loops in this code to calculate it for different scenarios 
+
 % Prepare Matlab
 clc; clear;
 
