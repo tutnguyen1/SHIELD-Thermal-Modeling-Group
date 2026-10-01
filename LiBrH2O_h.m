@@ -1,4 +1,4 @@
-function h = LiBrH20_h(x,t)
+function h = LiBrH2O_h(x,t)
 % Function LiBrH20_Enthalpy calcultates the Enthalpy for the corresponding 
 % concentration and temperature of Lithium Bromide - Water solution,
 % within the range as per as curve-fitting equation.

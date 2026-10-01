@@ -156,7 +156,7 @@
 %vx_ps	Vapour volume fraction as a function of pressure and entropy.
 
 
-function Out=XSteam(fun,In1,In2)
+function Out=H2O(fun,In1,In2)
 %*Contents.
 %*1 Calling functions
 %*1.1
@@ -342,9 +342,9 @@ case 'p_hs'
   High_Bound = fromSIunit_p(100);
   Low_Bound = fromSIunit_p(0.000611657);
   ps = fromSIunit_p(10);
-  rhos = 1 / XSteam('v_ph',ps, h);
+  rhos = 1 / H2O('v_ph',ps, h);
   while abs(rho - rhos) > 0.0000001
-    rhos = 1 / XSteam('v_ph',ps, h);
+    rhos = 1 / H2O('v_ph',ps, h);
     if rhos >= rho
       High_Bound = ps;
     else
@@ -1265,21 +1265,21 @@ case {'my_ph'}
     end
     
 case 'my_ps'
-    h = XSteam('h_ps',In1, In2);
-    Out = XSteam('my_ph',In1, h);
+    h = H2O('h_ps',In1, In2);
+    Out = H2O('my_ph',In1, h);
     
     %***********************************************************************************************************
     %*1.13 Prandtl
     case 'pr_pt'
-  Cp = toSIunit_Cp(XSteam('Cp_pT',In1, In2));
-  my = toSIunit_my(XSteam('my_pT',In1,In2));
-  tc = toSIunit_tc(XSteam('tc_pT',In1,In2));
+  Cp = toSIunit_Cp(H2O('Cp_pT',In1, In2));
+  my = toSIunit_my(H2O('my_pT',In1,In2));
+  tc = toSIunit_tc(H2O('tc_pT',In1,In2));
   Out = Cp * 1000 * my / tc;
 
     case 'pr_ph'
-  Cp = toSIunit_Cp(XSteam('Cp_ph',In1, In2));
-  my = toSIunit_my(XSteam('my_ph',In1,In2));
-  tc = toSIunit_tc(XSteam('tc_ph',In1,In2));
+  Cp = toSIunit_Cp(H2O('Cp_ph',In1, In2));
+  my = toSIunit_my(H2O('my_ph',In1,In2));
+  tc = toSIunit_tc(H2O('tc_ph',In1,In2));
   Out = Cp * 1000 * my / tc;
 
     %***********************************************************************************************************
@@ -1292,15 +1292,15 @@ case 'st_t'
     Out = fromSIunit_st(Surface_Tension_T(T));
     
 case 'st_p'
-    T = XSteam('Tsat_p',In1);
+    T = H2O('Tsat_p',In1);
     T = toSIunit_T(T);
     Out = fromSIunit_st(Surface_Tension_T(T));
     
     %***********************************************************************************************************
     %*1.16 Thermal conductivity
 case 'tcl_p'
-    T = XSteam('Tsat_p',In1);
-    v = XSteam('vL_p',In1);
+    T = H2O('Tsat_p',In1);
+    v = H2O('vL_p',In1);
     p = toSIunit_p(In1);
     T = toSIunit_T(T);
     v = toSIunit_v(v);
@@ -1310,8 +1310,8 @@ case 'tcl_p'
     
 case 'tcv_p'
     ps = In1;
-    T = XSteam('Tsat_p',ps);
-    v = XSteam('vV_p',ps);
+    T = H2O('Tsat_p',ps);
+    v = H2O('vV_p',ps);
     p = toSIunit_p(In1);
     T = toSIunit_T(T);
     v = toSIunit_v(v);
@@ -1320,8 +1320,8 @@ case 'tcv_p'
     
 case 'tcl_t'
     Ts = In1;
-    p = XSteam('psat_T',Ts);
-    v = XSteam('vL_T',Ts);
+    p = H2O('psat_T',Ts);
+    v = H2O('vL_T',Ts);
     p = toSIunit_p(p);
     T = toSIunit_T(Ts);
     v = toSIunit_v(v);
@@ -1330,8 +1330,8 @@ case 'tcl_t'
     
 case 'tcv_t'
     Ts = In1;
-    p = XSteam('psat_T',Ts);
-    v = XSteam('vV_T',Ts);
+    p = H2O('psat_T',Ts);
+    v = H2O('vV_T',Ts);
     p = toSIunit_p(p);
     T = toSIunit_T(Ts);
     v = toSIunit_v(v);
@@ -1341,7 +1341,7 @@ case 'tcv_t'
 case 'tc_pt'
     Ts = In2;
     ps = In1;
-    v = XSteam('v_pT',ps, Ts);
+    v = H2O('v_pT',ps, Ts);
     p = toSIunit_p(ps);
     T = toSIunit_T(Ts);
     v = toSIunit_v(v);
@@ -1351,8 +1351,8 @@ case 'tc_pt'
 case 'tc_ph'
     hs = In2;
     ps = In1;
-    v = XSteam('v_ph',ps, hs);
-    T = XSteam('T_ph',ps, hs);
+    v = H2O('v_ph',ps, hs);
+    T = H2O('T_ph',ps, hs);
     p = toSIunit_p(ps);
     T = toSIunit_T(T);
     v = toSIunit_v(v);
@@ -1361,10 +1361,10 @@ case 'tc_ph'
     
 case 'tc_hs'
     hs = In1;
-    p = XSteam('p_hs',hs, In2);
+    p = H2O('p_hs',hs, In2);
     ps = p;
-    v = XSteam('v_ph',ps, hs);
-    T = XSteam('T_ph',ps, hs);
+    v = H2O('v_ph',ps, hs);
+    T = H2O('T_ph',ps, hs);
     p = toSIunit_p(p);
     T = toSIunit_T(T);
     v = toSIunit_v(v);
