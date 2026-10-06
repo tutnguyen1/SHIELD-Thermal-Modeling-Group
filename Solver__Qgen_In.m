@@ -1,4 +1,4 @@
-function [COP, m, P, h, T, Q, misc] = Solver__Qgen_Mass_Flow(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn)
+function [COP, m, P, h, T, Q, misc] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn)
 %   LiBr_Absorption_solver : Main code that evaluates properties of
 %   absorption refrigeration cycle
 %

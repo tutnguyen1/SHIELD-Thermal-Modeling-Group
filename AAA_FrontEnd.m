@@ -20,7 +20,7 @@ fprintf("\n\n")
 
 % Try with Qgen
 Qsolar = Q(2);
-[COP, m, P, h, T, Q, misc] = Solver__Qgen_Mass_Flow(Tevap, Tabs, Tcond, Tgen, Qsolar,eta_HX, 'false');
+[COP, m, P, h, T, Q, misc] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qsolar,eta_HX, 'false');
 
 % Print Results -----------------------------------------------------------
 Print_Results(COP,m,P,Q,h);

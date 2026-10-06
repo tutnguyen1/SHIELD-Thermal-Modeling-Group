@@ -20,7 +20,7 @@ for i = 1:N
 
     Qgen = t^2;     % Whatever the Qgen profile is in kW
 
-    [COP,m,~,~,~,Q,misc] = Solver__Qgen_Mass_Flow(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn);
+    [COP,m,~,~,~,Q,misc] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn);
 
     Qgen_hist(i)  = Qgen;
     COP_hist(i)   = COP;
