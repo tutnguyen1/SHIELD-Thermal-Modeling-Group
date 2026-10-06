@@ -1,4 +1,4 @@
-function [COP, m, P, h, T, Q, misc] = Solver__Qgen_IN(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn)
+function [COP, m, P, h, T, Q, misc] = Solver__Qgen_Mass_Flow(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn)
 %   LiBr_Absorption_solver : Main code that evaluates properties of
 %   absorption refrigeration cycle
 %
@@ -20,8 +20,8 @@ function [COP, m, P, h, T, Q, misc] = Solver__Qgen_IN(Tevap, Tabs, Tcond, Tgen, 
 %       m(2) mw : Weak Solution
 %       m(3) ms : Strong Solution
 %   P : Pressure [kPa] {1x2 array. see below for calling array values}
-%       P(1) Ph : High Side
-%       P(2) Pl : Low Side
+%       P(1) Pl : Low Side
+%       P(2) Ph : High Side
 %   h : Specific Enthalpies [kJ/kg] {1x10 array}
 %       h(1) :      Evap      OUT | IN      Abs
 %       h(2) :      Gen       OUT | IN      Cond
@@ -81,7 +81,7 @@ v5 = LiBrH2O_v(Tabs,Xw);                % Specific Volume at Pump [m^3/kg]
 wp = v5*(Ph-Pl);                        % Specific Pump Work (Incompressible Solution) [kJ/kg]
 
 cp_w = LiBrH2O_Cp(Tabs,Xw,Pl);          % Weak Solution Specific Heat (LiBr Empirical Fit) [kJ/(kg-K)]
-cp_s = LiBrH2O_Cp(Tgen,Xw,Ph);          % Strong Solution Specific Heat (LiBr Empirical Fit) [kJ/(kg-K)]
+cp_s = LiBrH2O_Cp(Tgen,Xs,Ph);          % Strong Solution Specific Heat (LiBr Empirical Fit) [kJ/(kg-K)]
 
 h1 = H2O_STEAM('hV_T',Tevap);           % Evaporator Outlet Enthalpy (Water, Sat. Vapor) [kJ/kg]
 h2 = H2O_STEAM('h_pT',Ph/100,Tgen);     % Generator Refrigerant Outlet Enthalpy (Superheated Vapor) [kJ/kg]

@@ -20,9 +20,12 @@ fprintf("\n\n")
 
 % Try with Qgen
 Qsolar = Q(2);
-[COP, m, P, h, T, Q, misc] = Solver__Qgen_IN(Tevap, Tabs, Tcond, Tgen, Qsolar,eta_HX, 'false');
+[COP, m, P, h, T, Q, misc] = Solver__Qgen_Mass_Flow(Tevap, Tabs, Tcond, Tgen, Qsolar,eta_HX, 'false');
 
 % Print Results -----------------------------------------------------------
 Print_Results(COP,m,P,Q,h);
 
 % Results should be the same
+
+%trying the time dependent mass flow rates
+Mass_Flow_Rate_Time_Variant(Tevap, Tabs, Tcond, Tgen, eta_HX, 'false'); % Qgen is independently called in the function whenever we get the function
