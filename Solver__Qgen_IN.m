@@ -1,15 +1,15 @@
-function [COP, m, P, h, T, Q, misc] = LiBr_Absorption_solver(Tevap, Tabs, Tcond, Tgen, Qevap, eta_HX, warn)
+function [COP, m, P, h, T, Q, misc] = Solver__Qgen_IN(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn)
 %   LiBr_Absorption_solver : Main code that evaluates properties of
 %   absorption refrigeration cycle
 %
-%   [COP, m, P, h, T, Q, misc] = LiBr_Absorption_solver(Tevap, Tabs, Tcond, Tgen, Qevap, eta_HX);
+%   [COP, m, P, h, T, Q, misc] = Solver__Qgen_IN(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn);
 %
 % Inputs
 %   Tevap : Temp, Evaporator [C]
 %   Tabs : Temp, Absorber [C]
 %   Tcond : Temp, Condenser [C]
 %   Tgen : Temp, Generator [C]
-%   Qevap : Heat, Refrigeration Load [kW]
+%   Qgen : Heat, Generator Input [kW]
 %   eta_HX : Effectiveness, Soln Heat Exchanger [100% -> 1]
 %   warn : Enable/Disable Warning messages for out of range values [true/false]
 %
@@ -65,13 +65,14 @@ function [COP, m, P, h, T, Q, misc] = LiBr_Absorption_solver(Tevap, Tabs, Tcond,
 %   misc : Miscellaneous Properties [see below] {1x5 array, add extra properties here as needed}
 %       misc(1) : i.e. pump specific work [kJ/kg]
 %       misc(2) : circulation ratio [-]
-%       misc(3) : [Extra]
-%       misc(4) : [Extra]
-%       misc(5) : [Extra]
+%       misc(3) : ???
+%       misc(4) : ???
+%       misc(5) : ???
 
 %% Properties %%
 Xw = LiBrH2O_X(Tevap, Tabs, warn);      % Concentration, Weak Solution [LiBr/kg soln]
 Xs = LiBrH2O_X(Tcond, Tgen, warn);      % Concentration, Strong Solution [LiBr/kg soln]
+lambda = Xw/(Xs-Xw);                    % Circulation Ratio (definition) [kg/s]
 
 Ph = H2O_STEAM('psat_T',Tcond) * 100;   % High-side System Pressure (Water, Sat.) [kPa] % Note: Mult by 100 to conv. Bar -> kPa
 Pl = H2O_STEAM('psat_T',Tevap) * 100;   % Low-side System Pressure (Water, Sat.) [kPa] % Note: Mult. by 100 to conv. Bar -> kPa
@@ -83,18 +84,12 @@ cp_w = LiBrH2O_Cp(Tabs,Xw,Pl);          % Weak Solution Specific Heat (LiBr Empi
 cp_s = LiBrH2O_Cp(Tgen,Xw,Ph);          % Strong Solution Specific Heat (LiBr Empirical Fit) [kJ/(kg-K)]
 
 h1 = H2O_STEAM('hV_T',Tevap);           % Evaporator Outlet Enthalpy (Water, Sat. Vapor) [kJ/kg]
-h2 = H2O_STEAM('h_pT',Ph/100,Tgen);         % Generator Refrigerant Outlet Enthalpy (Superheated Vapor) [kJ/kg]
+h2 = H2O_STEAM('h_pT',Ph/100,Tgen);     % Generator Refrigerant Outlet Enthalpy (Superheated Vapor) [kJ/kg]
 h3 = H2O_STEAM('hL_T',Tcond);           % Condenser Outlet Enthalpy (Water, Sat. Liquid) [kJ/kg]
 h4 = h3;                                % Refrigerant Valve Outlet Enthalpy (Isentropic) [kJ/kg]
 h5 = LiBrH2O_h(Xw,Tabs);                % Absorber Outlet Enthalpy (LiBr Lookup Table) [kJ/kg]
 h6 = h5 + wp;                           % Pump Outlet Enthalpy (Isentropic) [kJ/kg]
 h8 = LiBrH2O_h(Xs,Tgen);                % Generator Absorbent Outlet Enthalpy (LiBr Empirical Fit) [kJ/kg]
-
-% Mass Flow ---------------------------------------------------------------
-lambda = Xw/(Xs-Xw);                    % Circulation Ratio (definition) [kg/s]
-mr = Qevap/(h1-h4);                     % Refrigerant Mass Flow (Energy Balance of Evaporator) [kg/s]
-ms = mr * lambda;                       % Strong Solution Mass Flow Rate (Mass balance) [kg/s]
-mw = mr * (1+lambda);                   % Weak Solution Mass Flow Rate (Mass balance) [kg/s]
 
 % Solution Heat Exchanger % -----------------------------------------------
 qhx_max = min(cp_s, cp_w)*(Tgen-Tabs);  % Solution HX max heat transfer [kJ/kg]
@@ -103,8 +98,14 @@ h7 = h6 + qhx;                          % Solution HX Cold Outlet Enthalpy [kJ/k
 h9 = h8 - qhx;                          % Solution HX Hot Outlet Enthalpy [kJ/kg]
 h10 = h9;                               % Solution Valve Outlet Enthalpy (Isentropic) [kJ/kg]
 
+% Mass Flow ---------------------------------------------------------------
+mr = Qgen / ...
+     (h2+lambda*h8-(1+lambda)*h7);      % Refrigerant Mass Flow (Energy Balance of Generator) [kg/s]
+ms = mr * lambda;                       % Strong Solution Mass Flow Rate (Mass balance) [kg/s]
+mw = mr * (1+lambda);                   % Weak Solution Mass Flow Rate (Mass balance) [kg/s]
+
 % Heat Transfers ----------------------------------------------------------
-Qgen = mr*h2 + ms*h8 - mw*h7;           % Generator Heat Input [kW]
+Qevap = mr*(h1-h4);                     % Evaporator Heat Load [kW]
 Qcond = mr*(h2-h3);                     % Condenser Heat Rejection [kW]
 Qabs = mr*h1 + ms*h10 - mw*h5;          % Absorber Heat Rejection [kW]
 Wp = wp * mw;                           % Pump Work () [kW]

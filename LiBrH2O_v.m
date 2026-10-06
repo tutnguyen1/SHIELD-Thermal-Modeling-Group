@@ -10,7 +10,7 @@ x = (X/MW_LiBr) / ...
     (X/MW_LiBr + (1-X)/MW_H2O);
 
 % Saturated liquid water density at T
-rho_w_mass = XSteam('rhol_t',T);   % kg/m^3
+rho_w_mass = H2O_STEAM('rhol_t',T);   % kg/m^3
 
 % Convert water density to molar density
 rho_w_molar = rho_w_mass/MW_H2O;
