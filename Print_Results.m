@@ -3,8 +3,8 @@ function [] = Print_Results(COP, m, P, Q, h)
 fprintf('COP = %.3f\n\n', COP);
 
 fprintf('Refrigerant flow rate = %.4f kg/s\n', m(1));
-fprintf('Strong solution flow = %.4f kg/s\n', m(2));
-fprintf('Weak solution flow   = %.4f kg/s\n\n', m(3));
+fprintf('Weak solution flow   = %.4f kg/s\n\n', m(2));
+fprintf('Strong solution flow = %.4f kg/s\n', m(3));
 
 fprintf('Low-side pressure  = %.3f Pa\n', P(1));
 fprintf('High-side pressure = %.3f Pa\n\n', P(2));
