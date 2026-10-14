@@ -29,3 +29,13 @@ Print_Results(COP,m,P,Q,h);
 
 %trying the time dependent mass flow rates
 Mass_Flow_Rate_Time_Variant(Tevap, Tabs, Tcond, Tgen, eta_HX, 'false'); % Qgen is independently called in the function whenever we get the function
+%%
+Temps = [7; 40; 40; 90];
+[COP, m, P, h, T, Q, misc] = Solver__Mr_In(7, 40, 40, 90, 1.4, 0.8, 'false');
+R = temperatureResiduals(Temps,28800,Q);
+disp(R);
+
+
+%%
+%try the time dependent temperature
+Temperature_Time_Variance(Tevap, Tabs, Tcond, Tgen, m(1), eta_HX, 'false');

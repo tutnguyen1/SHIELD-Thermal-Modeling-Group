@@ -22,4 +22,6 @@ if t<t_charge_start || t>t_charge_end
     g = 0;
 end
 out = (Acollector * collectorETA * g)/1000; %output in kW
+
+
 end
