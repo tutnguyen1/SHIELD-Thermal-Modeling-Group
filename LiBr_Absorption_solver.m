@@ -65,8 +65,8 @@ function [COP, m, P, h, T, Q, misc] = LiBr_Absorption_solver(Tevap, Tabs, Tcond,
 %   misc : Miscellaneous Properties [see below] {1x5 array, add extra properties here as needed}
 %       misc(1) : i.e. pump specific work [kJ/kg]
 %       misc(2) : circulation ratio [-]
-%       misc(3) : [Extra]
-%       misc(4) : [Extra]
+%       misc(3) : Xs [% LiBr kg]
+%       misc(4) : Xw [% LiBr kg]
 %       misc(5) : [Extra]
 
 %% Properties %%
@@ -126,7 +126,7 @@ P = [Pl Ph];
 h = [h1 h2 h3 h4 h5 h6 h7 h8 h9 h10];
 T = [Tevap, Tgen, Tcond, Tcond, Tabs, Tabs, T7 Tgen T9 T10];
 Q = [Qabs, Qgen, Qcond, Qevap, Wp, error];
-misc = [wp, lambda, -1, -1, -1];
+misc = [wp, lambda, Xs, Xw, -1];
 
 
 end

@@ -6,8 +6,8 @@ fprintf('Refrigerant flow rate = %.4f kg/s\n', m(1));
 fprintf('Weak solution flow   = %.4f kg/s\n\n', m(2));
 fprintf('Strong solution flow = %.4f kg/s\n', m(3));
 
-fprintf('Low-side pressure  = %.3f Pa\n', P(1));
-fprintf('High-side pressure = %.3f Pa\n\n', P(2));
+fprintf('Low-side pressure  = %.3f kPa\n', P(1));
+fprintf('High-side pressure = %.3f kPa\n\n', P(2));
 
 fprintf('Cooling load Qe = %.3f kW\n', Q(4));
 fprintf('Generator heat Qg = %.3f kW\n', Q(2));
