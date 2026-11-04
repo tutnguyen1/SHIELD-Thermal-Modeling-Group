@@ -18,7 +18,7 @@ for i = 1:N
 
     t = time(i);
 
-    Qgen = Qsolar(t,18000,39600,500,0.75)+50000;     % Using the values from the paper referenced in the Qsolar function, plus adding some baseline function that the waste heat represents
+    Qgen = Qsolar(t,18000,39600,500,0.75)+5000;     % Using the values from the paper referenced in the Qsolar function, plus adding some baseline function that the waste heat represents
 
     [COP,m,~,~,~,Q,misc] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qgen, eta_HX, warn);
 

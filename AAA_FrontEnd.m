@@ -28,7 +28,7 @@ X_Log = zeros(1,length(Tgen));
 for i = 1:length(Tgen)
     [COP, m, P, h, T, Q, misc] = LiBr_Absorption_solver(Tevap, Tabs, Tcond, Tgen(i), Qload,eta_HX, 'false');
 
-    fprintf('mr [kg/s] = %.3f \n', COP);
+    fprintf('mr [kg/s] = %.3f \n', m(1));
     Qg_Log(i) = Q(2);
     COP_Log(i) = COP;
     m_Log(1:3,i) = m';
@@ -46,9 +46,17 @@ Tevap_range = 1:1:12;
 Tabs_range = 30:1:45;
 Tcond_range = 30:1:45;
 
-[COP,Topt] = COP_Finder(Tgen_range, Tevap_range, Tabs_range, Tcond_range, Qload, eta_HX);
+[COP,Topt] = COP_Finder(Tgen_range, Tevap_range, Tabs_range, Tcond_range, 2200, 0.8);
 
-disp(COP);
+fprintf('COP = %.3f \n', COP);
+fprintf('Tgen = %.3f \n', Topt(1));
+fprintf('Tevap = %.3f \n', Topt(2));
+fprintf('Tabs = %.3f \n', Topt(3));
+fprintf('Cond = %.3f \n', Topt(4));
+
+
+
+
 
 %%
 %trying the time dependent mass flow rates
