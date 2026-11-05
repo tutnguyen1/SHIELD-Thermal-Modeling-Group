@@ -54,6 +54,7 @@ fprintf('Tevap = %.3f \n', Topt(2));
 fprintf('Tabs = %.3f \n', Topt(3));
 fprintf('Cond = %.3f \n', Topt(4));
 
+%% nested for loops for varying the temp of all the components for max COP
 
 
 

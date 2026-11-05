@@ -1,17 +1,21 @@
 % equation developed from Simulation and Performance Analysis of a Solar-Charged Desalination Salt Thermal Energy Storage System with Bypass Discharge
 % by Andy Duong and Reza Lakeh
 
-%t = current time (s)
-%t_charge_start = when the charging window starts (s)
-%t_charge_end = when charging window ends (s)
+%t = current time (hr)
+%t_charge_start = when the charging window starts (hr)
+%t_charge_end = when charging window ends (hr)
 %Acollector = total effective area of colar collectors (m^2)
 %collectorETA = efficiency of solar collectors (decimal form)
 
-function out = Qsolar(t,t_charge_start,t_charge_end,Acollector,collectorETA)
+function out = Qsolar(Gmax, t,t_charge_start,t_charge_end,Acollector,collectorETA)
+
+% Convert time from hours to seconds
+t_charge_start = t_charge_start * 3600;
+t_charge_end = t_charge_end * 3600;
+t = t * 3600;
 
 %input is time, and output is solar irradiance (W/m^2)
 
-Gmax = 1000;  % Peak irradiance (W/m^2)
 tpeak = (t_charge_end + t_charge_start)/2; % peak time during charging window (s) for now assuming in the middle
 sigma = (t_charge_end - t_charge_start)/4; % standard deviation (s) simple assumption for standard deviation
 
