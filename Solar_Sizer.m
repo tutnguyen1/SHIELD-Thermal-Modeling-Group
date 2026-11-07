@@ -10,13 +10,13 @@ Tevap = 12;
 Tcond = 30;
 Tabs = 30;
 Tgen = 62;
-Area = 12483; %(m^2)
+Area = 50000; %(m^2)
 
 for i = 1:N
 
     t = time(i);
 
-    Qgen = Qsolar(t,28800,61200,Area,0.75);     % Using the values from the paper referenced in the Qsolar function, plus adding some baseline function that the waste heat represents
+    Qgen = Qsolar(t,28800,61200,Area,0.6,'max');     % Using the values from the paper referenced in the Qsolar function, plus adding some baseline function that the waste heat represents
 
     [COP,m,~,~,~,Q,misc] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qgen, 0.7, 'false');
 
@@ -43,13 +43,13 @@ fprintf('Solar Energy = %1.3f MJ\n', energy_solar)
 fprintf('Data center waste = %1.3f MJ\n', data_waste)
 fprintf('Energy Deficit = %1.3f MJ\n', difference)
 
-%% solar sizer auto
+%% automatic solar sizer for purely solar powered
 
 dt = 60;                       % Time Step
 time = 0:dt:24*3600;           % Total Time
 N = length(time);
 difference = 7;
-area = 1;
+area = 1; %m^2 starting value
 Qgen_hist  = zeros(1,N);
 while difference > 0 
     for i = 1:N
@@ -57,7 +57,9 @@ while difference > 0
         Qgen = Qsolar(t,28800,61200,area,0.75);     % Using the values from the paper referenced in the Qsolar function, plus adding some baseline function that the waste heat represents
         Qgen_hist(i)  = Qgen;
     end
-    energy_solar = (trapz(time, Qgen_hist))/1000;
+    energy_solar = (trapz(time, Qgen_hist))/1000; %turning into MW for easier presentation and since we have a collection of discrete points, we are integrating via trapezoidal areas
+    %not the best but since this isn't a continuous function we cant use the
+    %integrate function
     data_waste = (2200 * (3600*24))/1000;
     difference = (data_waste - energy_solar);
     area = area+1;
