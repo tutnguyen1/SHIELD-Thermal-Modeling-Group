@@ -19,7 +19,6 @@ A_solar =  area_ratio .* A_data;                   % Solar Area (m^2)
 q_data = 0.220;                           % Heat Gen. by Data Center per area (kW/m2)
 q_solar = 23.9*10^3;                          % Avg energy from Solar per area per day (kWs/m2)
 
-
 % Extra Variables
 eta_HX = .80;                           % Solution Heat Exchanger Efficiency [100% -> 1]
 
@@ -49,14 +48,27 @@ for i = 1:length(A_solar)
     end 
 end
 
-
 %Modify Qs based on heat recovery efficiency
-eta_HXREC = 0.750;
+eta_HXREC = 0.5;
 Qgen_req = Qgen_req * (1-eta_HXREC);
 Qgen_prod = Qgen_prod + Qgen_req*eta_HXREC;
 
+plotting.Tyler5(1, time, [Qgen_req, Qgen_prod], area_ratio);
 
-plotting.Tyler5(1, time, [Qgen_req, Qgen_prod], area_ratio)
+% Determine Qabs, Qcond, Qrecovery using the Qgen calculated above
+Qabs_prod = zeros(length(time),length(A_solar));
+Qcond_prod = zeros(length(time),length(A_solar));
+Qpump_prod = zeros(length(time),length(A_solar));
+for i = 1:length(A_solar)
+    for j = 1:length(time)
+        [~, ~, ~, ~, ~, Q, ~] = Solver__Qgen_In(Tevap, Tabs, Tcond, Tgen, Qgen_prod(j, i),eta_HX, 'false');
+        Qabs_prod(j, i) = Q(1);
+        Qcond_prod(j, i) = Q(3);
+        Qpump_prod(j, i) = Q(5);
+    end 
+end
+
+plotting.Tyler6(2, time, [Qgen_req, Qgen_prod, Qabs_prod, Qcond_prod, Qpump_prod], area_ratio);
 
 %% auto sizing
 
