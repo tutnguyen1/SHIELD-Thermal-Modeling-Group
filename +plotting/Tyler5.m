@@ -11,7 +11,7 @@ pl = plot(ax, time, Q);
 lgn = legend();
 
 % Graph Labels %
-fig.Name = "Qgen vs. Time (75% Recovery)"; % name of figure
+fig.Name = "Qgen vs. Time (20% Area Ratio)"; % name of figure
 ax.XLabel.String = 'Time [hr]'; % x label
 ax.YLabel.String = 'Energy [MW]'; % y label
 % legend_percentages = "PV Solar Area Ratio " + string(area_ratio .* 100) + "%";
